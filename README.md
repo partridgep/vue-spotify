@@ -1,4 +1,6 @@
-# vue-tailwind-skeleton
+# vue-spotify
+
+A front-end only Spotify clone for practice in Vue and Tailwind.
 
 ## Project setup
 ```
@@ -15,15 +17,3 @@ npm run serve
 npm run build
 ```
 
-### Run your unit tests
-```
-npm run test:unit
-```
-
-### Lints and fixes files
-```
-npm run lint
-```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
