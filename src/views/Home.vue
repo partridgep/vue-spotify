@@ -1,9 +1,5 @@
 <template>
-  <div class="home">
-    <h1 class="text-center">
-      Welcome to the Vue Tailwind Skeleton project
-    </h1>
-  </div>
+  <div class="home" />
 </template>
 
 <script>
