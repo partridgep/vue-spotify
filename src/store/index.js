@@ -5,6 +5,11 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    user: {
+      name: "Paul Partridge",
+      photo: require("../assets/ProfilePicture.png")
+    },
+    blankUserPic: require("../assets/NoProfilePic.png"),
     pages: [
       { id: "home", name: "Home", icon: "home" },
       { id: "search", name: "Search", icon: "search" },
@@ -16,7 +21,7 @@ export default new Vuex.Store({
       { name: "Wine & Dine" },
       { name: "Discover Weekly" },
       { name: "Guardians of the Galaxy" },
-      { name: "Afternoon Love" },
+      { name: "Afternoon Acoustic" },
       { name: "Coffeehouse Jazz" },
       { name: "The New Alt" }
     ]
