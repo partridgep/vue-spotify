@@ -17,7 +17,15 @@ module.exports = {
       'darkest': '#191414'
       }
     },
+    screens: {
+      sm: '640px',
+      md: '768px',
+      lg: '1024px',
+      xl: '1280px'
+    }
   },
   variants: {},
-  plugins: [],
+  plugins: [
+    require("@tailwindcss/line-clamp")
+  ],
 }

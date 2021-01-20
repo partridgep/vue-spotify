@@ -17,14 +17,36 @@ export default new Vuex.Store({
     ],
     currentPageID: "home",
     playlists: [
-      { name: "OST" },
-      { name: "Wine & Dine" },
-      { name: "Discover Weekly" },
-      { name: "Guardians of the Galaxy" },
-      { name: "Afternoon Acoustic" },
-      { name: "Coffeehouse Jazz" },
-      { name: "The New Alt" }
+      { name: "OST", recentlyPlayed: true, icon: require("../assets/OST.png") },
+      { name: "Wine & Dine", recentlyPlayed: false, icon: require("../assets/WineAndDine.png") },
+      { name: "Discover Weekly", recentlyPlayed: true, icon: require("../assets/DiscoverWeekly.png") },
+      { name: "Guardians of the Galaxy", recentlyPlayed: false, icon: require("../assets/Guardians.png") },
+      { name: "Afternoon Acoustic", recentlyPlayed: false, icon: require("../assets/AfternoonAcoustic.png") },
+      { name: "Coffeehouse Jazz", recentlyPlayed: false, icon: require("../assets/CoffeehouseJazz.png") }
+    ],
+    dailyMixes: [
+      { name: "Daily Mix 1", icon: require("../assets/DailyMix1.png") },
+      { name: "Daily Mix 2", icon: require("../assets/DailyMix2.png") },
+      { name: "Daily Mix 3", icon: require("../assets/DailyMix3.png") }
+    ],
+    recentlyPlayed: [
+      { name: "Tenet (Original Motion Picture Soundtrack)", icon: require("../assets/TenetOST.png") },
+      { name: "Classic Rock Workout", icon: require("../assets/ClassicRockWorkout.png") },
+      { name: "The Polar Express", icon: require("../assets/PolarExpress.png") }
     ]
+  },
+  getters: {
+    getShortcuts: ({ playlists, dailyMixes, recentlyPlayed }) => {
+      // get a random assortment of 8 playlists, daily mixes, and recently played
+      let combinedAll = [...playlists, ...dailyMixes, ...recentlyPlayed];
+      let shortcuts = [];
+      while (shortcuts.length < 8) {
+        let randIndex = Math.floor(Math.random() * combinedAll.length);
+        let randomPick = combinedAll[randIndex];
+        if (!shortcuts.includes(randomPick)) shortcuts.push(randomPick);
+      }
+      return shortcuts;
+    }
   },
   mutations: {
     SET_PAGE_ID: (state, id) => {
