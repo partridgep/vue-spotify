@@ -29,7 +29,25 @@
             <i class="material-icons text-white text-center p-2">play_arrow</i>
           </button>
         </div>
-        <p class="w-full px-5 pb-3 truncate">{{ playedItem.name }}</p>
+        <p class="w-full px-5 pb-2 truncate">{{ playedItem.name }}</p>
+        <p
+          v-if="playedItem.artist"
+          class="w-full px-5 pb-10 truncate text-xs font-normal text-lightest"
+        >
+          {{ playedItem.artist }}
+        </p>
+        <p
+          v-if="playedItem.description"
+          class="w-full px-5 pb-10 truncate text-xs font-normal text-lightest"
+        >
+          {{ playedItem.description }}
+        </p>
+        <p
+          v-if="playedItem.creator"
+          class="w-full px-5 pb-10 truncate text-xs font-normal text-lightest"
+        >
+          By {{ playedItem.creator }}
+        </p>
       </button>
     </div>
   </div>

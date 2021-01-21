@@ -1,11 +1,10 @@
 <template>
   <div class="bg-dark h-screen">
-    <div class="flex relative z-0" style="height: 88vh;">
+    <div class="flex relative z-0" style="height: 90.5vh;">
       <Sidebar />
       <MainContent />
     </div>
-    <!-- play bar -->
-    <div class="w-full bg-light z-10 relative" style="height: 12vh;"></div>
+    <PlayBar />
     <router-view />
   </div>
 </template>
@@ -13,9 +12,10 @@
 <script>
 import Sidebar from "./components/Sidebar/Sidebar.vue";
 import MainContent from "./components/MainContent/MainContent.vue";
+import PlayBar from "./components/PlayBar.vue";
 
 export default {
-  components: { Sidebar, MainContent },
+  components: { Sidebar, MainContent, PlayBar },
   name: "App"
 };
 </script>
