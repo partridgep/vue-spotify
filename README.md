@@ -17,3 +17,25 @@ npm run serve
 npm run build
 ```
 
+## Screenshots
+
+![Main Page](https://i.imgur.com/JF4Gi4I.png)
+**Goal: mimick Spotify as much as possible**
+
+## Features
+
+* Responsive minimization of cards just like the real Spotify
+![Responsive Cards](https://i.imgur.com/R3Gaui3.gif)
+
+* Scroll bars for current song and volume *(only functional for song playback as of now)*
+![Scroll Bars](https://i.imgur.com/xSshzyc.gif)
+
+
+* API Calls (to the Deezer API) to play 30-second snippets of songs 
+![Playing Songs](https://i.imgur.com/6OkElDK.gif)
+
+## Future Enhancements
+
+* Use of Vue Router to access different pages on the Spotify interface
+* Allow user to change currently playing song
+* Animations 
