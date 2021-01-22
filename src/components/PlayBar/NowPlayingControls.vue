@@ -9,8 +9,10 @@
       </button>
       <button
         class="rounded-full h-8 w-8 flex items-center justify-center mx-3 -mt-1 border-lightest border text-lightest hover:text-white focus:outline-none"
+        @click.prevent="playSong"
       >
-        <i class="material-icons">play_arrow</i>
+        <i v-if="!isPlaying" class="material-icons">play_arrow</i>
+        <i v-if="isPlaying" class="material-icons">pause</i>
       </button>
       <button class="mx-3 text-lightest hover:text-white focus:outline-none">
         <i class="material-icons">skip_next</i>
@@ -44,13 +46,35 @@
 </template>
 
 <script>
+import { mapState } from "vuex";
+
 export default {
   name: "NowPlayingControls.vue",
   data() {
     return {
       scrubbing: false,
-      songSliderVal: 0
+      songSliderVal: 0,
+      isPlaying: false,
+      audio: null
     };
+  },
+  computed: {
+    ...mapState(["nowPlaying"])
+  },
+  methods: {
+    playSong() {
+      if (this.audio === null) {
+        this.audio = new Audio(`${this.nowPlaying.data.preview}`);
+      }
+      if (this.nowPlaying) {
+        if (this.isPlaying === false) {
+          this.audio.play();
+        } else {
+          this.audio.pause();
+        }
+      }
+      this.isPlaying = !this.isPlaying;
+    }
   }
 };
 </script>

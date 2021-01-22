@@ -5,6 +5,7 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
   state: {
+    nowPlaying: null,
     user: {
       name: "Paul Partridge",
       photo: require("../assets/ProfilePicture.png")
@@ -126,6 +127,9 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    SET_CURRENT_TRACK: (state, object) => {
+      state.nowPlaying = object;
+    },
     SET_PAGE_ID: (state, id) => {
       state.currentPageID = id;
     },
