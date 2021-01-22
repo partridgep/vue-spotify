@@ -22,7 +22,7 @@
       </button>
     </div>
     <div class="z-10 flex items-center justify-between relative my-2 w-full">
-      <p class="text-xs text-lightest -ml-8">0:00</p>
+      <p class="text-xs text-lightest -ml-10"> {{ scrubbingHold ? formatTime(Math.ceil(this.songSliderVal * 30 / 100)) : formatTime(elapsedTime) }} </p>
       <div class="z-0 absolute rounded w-full h-1 bg-lightest opacity-50"></div>
       <div
         class="z-0 absolute rounded h-1"
@@ -35,12 +35,15 @@
         v-model="songSliderVal"
         @mouseover="scrubbing = true"
         @mouseout="scrubbing = false"
+        @change="setTrackTime"
+        @mousedown="scrubbingHold = true"
+        @mouseup="scrubbingHold = false"
         type="range"
         min="0"
         max="100"
         step="1"
       />
-      <p class="text-xs text-lightest -mr-8">3:28</p>
+      <p class="text-xs text-lightest -mr-10"> {{ scrubbingHold ? formatTime(Math.ceil(30 - this.songSliderVal * 30 / 100)) : formatTime(30 - elapsedTime) }} </p>
     </div>
   </div>
 </template>
@@ -53,9 +56,12 @@ export default {
   data() {
     return {
       scrubbing: false,
+      scrubbingHold: false,
       songSliderVal: 0,
       isPlaying: false,
-      audio: null
+      audio: null,
+      elapsedTime: 0,
+      timerID: null
     };
   },
   computed: {
@@ -64,7 +70,7 @@ export default {
   methods: {
     playSong() {
       if (this.audio === null) {
-        this.audio = new Audio(`${this.nowPlaying.data.preview}`);
+        this.audio = new Audio(this.nowPlaying.data.preview);
       }
       if (this.nowPlaying) {
         if (this.isPlaying === false) {
@@ -74,7 +80,37 @@ export default {
         }
       }
       this.isPlaying = !this.isPlaying;
+    },
+    setTrackTime() {
+      let newTime = Math.ceil(this.songSliderVal * 30 / 100);
+      this.audio.currentTime = newTime;
+      this.elapsedTime = newTime;
+    },
+    handleUpdateTimer() {
+      this.elapsedTime = ++this.elapsedTime;
+    },
+    handleTick() {
+      if (this.isPlaying) {
+        if (this.elapsedTime >= 30) {
+          this.isPlaying = false;
+          this.elapsedTime = 0;
+        } else {
+          this.handleUpdateTimer();
+        }
+      }
+      if (!this.scrubbingHold) this.songSliderVal = (this.elapsedTime / 30) * 100;
+    },
+    formatTime(seconds) {
+      let mins = Math.floor(seconds / 60).toString().padStart(2, '0');
+      let secs = (seconds % 60).toString().padStart(2, '0');
+      return `${mins}:${secs}`
     }
+  },
+  mounted() {
+    this.timerID = setInterval(this.handleTick, 1000);
+  },
+  beforeDestroyed() {
+    clearInterval(this.timerId);
   }
 };
 </script>
