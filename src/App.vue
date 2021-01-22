@@ -14,9 +14,7 @@ import Sidebar from "./components/Sidebar/Sidebar.vue";
 import MainContent from "./components/MainContent/MainContent.vue";
 import PlayBar from "./components/PlayBar/PlayBar.vue";
 
-import { api } from "./store/api";
-
-import { mapMutations } from "vuex";
+import { mapMutations, mapActions } from "vuex";
 
 export default {
   components: { Sidebar, MainContent, PlayBar },
@@ -26,14 +24,13 @@ export default {
     setCurrentTrack: function(object) {
       this.SET_CURRENT_TRACK(object);
     },
-    async getTrack() {
-      const track = await api.get("1130197962");
-      console.log(track.data);
-      this.setCurrentTrack(track);
+    ...mapActions(["getTrack"]),
+    getTrackAction(id) {
+      this.getTrack(id);
     }
   },
   mounted() {
-    this.getTrack();
+    this.getTrackAction("1130197962");
   }
 };
 </script>

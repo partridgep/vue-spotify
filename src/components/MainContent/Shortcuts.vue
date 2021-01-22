@@ -19,8 +19,10 @@
         <button
           v-show="showPlayBtn && hoveredIdx === index"
           class="rounded-full ml-auto mr-3 bg-green flex shadow-2xl focus:outline-none"
+          @click="!isPlaying || !currentPlaylist || currentPlaylist.name !== shortcut.name ? setCurrentPlaylist(shortcut) : playSong()"
         >
-          <i class="material-icons text-white text-center p-2">play_arrow</i>
+          <i v-if="!isPlaying || !currentPlaylist || currentPlaylist.name !== shortcut.name" class="material-icons text-white text-center p-2">play_arrow</i>
+          <i v-if="isPlaying && currentPlaylist && currentPlaylist.name === shortcut.name" class="material-icons text-white text-center p-2">pause</i>
         </button>
       </button>
     </div>
@@ -28,7 +30,7 @@
 </template>
 
 <script>
-import { mapState, mapGetters } from "vuex";
+import { mapState, mapGetters, mapMutations, mapActions } from "vuex";
 const tailwindConfig = require("../../../tailwind.config.js");
 
 export default {
@@ -43,7 +45,7 @@ export default {
     };
   },
   computed: {
-    ...mapState(["playlists"]),
+    ...mapState(["playlists", "currentPlaylist", "nowPlaying", "isPlaying"]),
     ...mapGetters(["getShortcuts"]),
     // booleans to display 4, 6, or 8 shortcuts depending on screen width
     // solutions below admittedly feel pretty hacky
@@ -57,7 +59,30 @@ export default {
   methods: {
     updateWindowSize() {
       this.windowWidth = window.innerWidth;
-    }
+    },
+    ...mapMutations(["SET_CURRENT_PLAYLIST", "TOGGLE_PLAY", "PLAY_SONG", "CHANGE_SONG"]),
+    ...mapActions(["getTrack"]),
+    togglePlay: function() {
+      this.TOGGLE_PLAY();
+    },
+    playSong: function() {
+      this.PLAY_SONG();
+    },
+    changeSong: function() {
+      this.CHANGE_SONG();
+    },
+    setCurrentPlaylist: async function(array) {
+      // switch to selected playlist
+      this.SET_CURRENT_PLAYLIST(array);
+      // make API call for first song in playlist
+      await this.getTrack(array.tracks[0]);
+      // signal that we will be changing songs
+      this.changeSong();
+      // if already playing a track, switch it off
+      if (this.isPlaying) this.togglePlay();
+      // once API data is obtained, play the song
+      this.playSong();
+    },
   },
   mounted() {
     this.updateWindowSize();

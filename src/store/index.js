@@ -3,9 +3,16 @@ import Vuex from "vuex";
 
 Vue.use(Vuex);
 
+import { api } from "./api";
+
 export default new Vuex.Store({
+
   state: {
+    isPlaying: false,
     nowPlaying: null,
+    changingSong: false,
+    audio: null,
+    currentPlaylist: null, 
     user: {
       name: "Paul Partridge",
       photo: require("../assets/ProfilePicture.png")
@@ -19,10 +26,16 @@ export default new Vuex.Store({
     currentPageID: "home",
     playlists: [
       {
-        name: "OST",
+        name: "Soundtracks",
         recentlyPlayed: true,
         icon: require("../assets/OST.png"),
-        creator: "Paul Partridge"
+        creator: "Paul Partridge",
+        tracks: [
+          "119437630",
+          "904631",
+          "527863461",
+          "123843454"
+        ]
       },
       {
         name: "Wine & Dine",
@@ -127,16 +140,51 @@ export default new Vuex.Store({
     }
   },
   mutations: {
+    TOGGLE_PLAY: (state) => {
+      state.isPlaying = !state.isPlaying;
+    },
     SET_CURRENT_TRACK: (state, object) => {
       state.nowPlaying = object;
+    },
+    SET_CURRENT_PLAYLIST: (state, object) => {
+      console.log(object);
+      state.currentPlaylist = object;
+      state.nowPlaying = object.tracks[0];
     },
     SET_PAGE_ID: (state, id) => {
       state.currentPageID = id;
     },
     MOVE_COVER_ART: state => {
       state.bigCoverArt = !state.bigCoverArt;
+    },
+    PLAY_SONG: state => {
+      if (state.changingSong && state.audio) {
+        state.audio.pause();
+      }
+      if (state.audio === null || state.changingSong) {
+        state.audio = new Audio(state.nowPlaying.data.preview);
+      }
+      if (state.nowPlaying) {
+        if (state.isPlaying === false) {
+          state.audio.play();
+        } else {
+          state.audio.pause();
+        }
+      }
+      state.isPlaying = !state.isPlaying;
+      state.changingSong = false;
+    },
+    CHANGE_SONG: state => {
+      state.changingSong = true;
+      if (state.audio) state.audio.pause();
     }
   },
-  actions: {},
+  actions: {
+    async getTrack({commit}, id) {
+      const track = await api.get(id);
+      console.log(track.data);
+      commit("SET_CURRENT_TRACK", track);
+    }
+  },
   modules: {}
 });

@@ -11,8 +11,8 @@
         class="rounded-full h-8 w-8 flex items-center justify-center mx-3 -mt-1 border-lightest border text-lightest hover:text-white focus:outline-none"
         @click.prevent="playSong"
       >
-        <i v-if="!isPlaying" class="material-icons">play_arrow</i>
-        <i v-if="isPlaying" class="material-icons">pause</i>
+        <i v-if="!this.isPlaying" class="material-icons">play_arrow</i>
+        <i v-if="this.isPlaying" class="material-icons">pause</i>
       </button>
       <button class="mx-3 text-lightest hover:text-white focus:outline-none">
         <i class="material-icons">skip_next</i>
@@ -49,7 +49,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapMutations } from "vuex";
 
 export default {
   name: "NowPlayingControls.vue",
@@ -58,28 +58,20 @@ export default {
       scrubbing: false,
       scrubbingHold: false,
       songSliderVal: 0,
-      isPlaying: false,
-      audio: null,
       elapsedTime: 0,
       timerID: null
     };
   },
   computed: {
-    ...mapState(["nowPlaying"])
+    ...mapState(["nowPlaying", "isPlaying", "audio", "changingSong"])
   },
   methods: {
-    playSong() {
-      if (this.audio === null) {
-        this.audio = new Audio(this.nowPlaying.data.preview);
-      }
-      if (this.nowPlaying) {
-        if (this.isPlaying === false) {
-          this.audio.play();
-        } else {
-          this.audio.pause();
-        }
-      }
-      this.isPlaying = !this.isPlaying;
+    ...mapMutations(["TOGGLE_PLAY", "PLAY_SONG"]),
+    togglePlay: function() {
+      this.TOGGLE_PLAY();
+    },
+    playSong: function() {
+      this.PLAY_SONG();
     },
     setTrackTime() {
       let newTime = Math.ceil(this.songSliderVal * 30 / 100);
@@ -91,8 +83,8 @@ export default {
     },
     handleTick() {
       if (this.isPlaying) {
-        if (this.elapsedTime >= 30) {
-          this.isPlaying = false;
+        if (this.elapsedTime >= 30 || this.changingSong) {
+          this.togglePlay();
           this.elapsedTime = 0;
         } else {
           this.handleUpdateTimer();
