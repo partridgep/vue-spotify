@@ -25,7 +25,7 @@ npm run build
 ## Features
 
 * Responsive minimization of cards just like the real Spotify
-![Responsive Cards](https://i.imgur.com/R3Gaui3.gif)
+![Responsive Cards](https://i.imgur.com/0SS9Gp2.gif)
 
 * Scroll bars for current song and volume *(only functional for song playback as of now)*
 ![Scroll Bars](https://i.imgur.com/xSshzyc.gif)
