@@ -12,7 +12,7 @@
 <script>
 import Sidebar from "./components/Sidebar/Sidebar.vue";
 import MainContent from "./components/MainContent/MainContent.vue";
-import PlayBar from "./components/PlayBar.vue";
+import PlayBar from "./components/PlayBar/PlayBar.vue";
 
 export default {
   components: { Sidebar, MainContent, PlayBar },
